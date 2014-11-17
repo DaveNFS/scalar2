@@ -1,8 +1,10 @@
+
 // Dave, Aditya
 
 
 int rows, cols; 
 int image[][];
+
 
 void setup()
 {
@@ -34,11 +36,17 @@ void setup()
 
 void draw()
 {
-    for (int i = 0; i < rows; i++)
+  color to = color( 229, 245, 249); 
+  color from = color(44, 162, 95); 
+  
+  for (int i = 0; i < rows; i++)
   {
     for (int j = 0; j < cols; j++)
       {
-         stroke(image[i][j]);
+         int grayscaleValue = image[i][j]; 
+         float percent = (float)grayscaleValue/255; 
+         color current = lerpColor(from, to, percent); 
+         stroke(current);
          point(i,j);
       }
   }
