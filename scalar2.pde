@@ -5,6 +5,8 @@
 int rows, cols; 
 int image[][];
 
+color to = color( 229, 245, 249); 
+color from = color(44, 162, 95); 
 
 void setup()
 {
@@ -36,8 +38,7 @@ void setup()
 
 void draw()
 {
-  color to = color( 229, 245, 249); 
-  color from = color(44, 162, 95); 
+
   
   for (int i = 0; i < rows; i++)
   {
