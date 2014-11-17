@@ -8,6 +8,12 @@ int image[][];
 color to = color( 229, 245, 249); 
 color from = color(44, 162, 95); 
 
+// may be used later
+color tempColorArr[][]; 
+
+boolean first = true; 
+
+
 void setup()
 {
   
@@ -33,12 +39,42 @@ void setup()
       }
   }
   
+  
+  // ---------------------------------------
+  // create a 2d colors array first
+  tempColorArr = new color[rows][cols]; 
+  
+  for (int i = 0; i < rows; i++)
+  {
+    for (int j = 0; j < cols; j++)
+      {
+         int grayscaleValue = image[i][j]; 
+         float percent = (float)grayscaleValue/255; 
+         color current = lerpColor(from, to, percent); 
+         tempColorArr[i][j] = current; 
+
+      }
+  }
+  
+  
+  //--------------------------------------
+  
 }
+
+
+
+
+
+
+
+
+
+
 
 
 void draw()
 {
-
+  // println(mouseX + "  " + mouseY);
   
   for (int i = 0; i < rows; i++)
   {
@@ -51,7 +87,24 @@ void draw()
          point(i,j);
       }
   }
+  
+  if(first)
+  {
+  
+  
+    first = false;
+  }
+  
 }
+
+
+
+
+
+
+
+
+
 
 
 //---------------------------------------------------------------------------------------------------------
@@ -178,6 +231,21 @@ class ReadFile{
   
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //------------------------------------------------------------------------------------
