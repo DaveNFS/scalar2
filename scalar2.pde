@@ -91,7 +91,7 @@ void draw()
   if(first)
   {
   
-  
+    save("one.png");
     first = false;
   }
   
