@@ -22,6 +22,8 @@ color tempColorArr[][];
 boolean first = true; 
 boolean color_do = true; 
 
+int isolines[][];
+
 void setup()
 {
   
@@ -66,6 +68,26 @@ void setup()
   
   
   //--------------------------------------
+  // create 2d array for isolines (marching square algorithm)
+  isolines = new int[rows][cols];
+  
+  for (int i = 0; i < rows; i++)
+  {
+    for (int j = 0; j < cols; j++)
+      {
+        image[i][j] = (int)test.cells[i][j];
+          if(image[i][j] < 200 && image[i][j] > 180 )
+           {
+             isolines[i][j] = 1; 
+           }
+           else
+           {
+             isolines[i][j] = 0; 
+           }
+         
+      }
+  }
+  
   
 }
 
@@ -112,6 +134,24 @@ void draw()
       }
   }
 
+
+  // draw isolines:
+  // ----------------
+  
+  stroke(255, 0, 0);
+  noFill();
+  beginShape(POINTS);
+      for (int i = 0; i < rows; i++)
+      {
+        for (int j = 0; j < cols; j++)
+          {
+              if(isolines[i][j] == 1)
+              {
+                vertex(i,j);
+              }
+          }
+      }
+  endShape();
   
   if(first)
   {
