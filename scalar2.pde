@@ -20,7 +20,7 @@ color from = color(44, 162, 95);
 color tempColorArr[][]; 
 
 boolean first = true; 
-
+boolean color_do = true; 
 
 void setup()
 {
@@ -84,24 +84,41 @@ void draw()
 {
   // println(mouseX + "  " + mouseY);
   
-  for (int i = 0; i < rows; i++)
+  if(color_do)
   {
-    for (int j = 0; j < cols; j++)
+      for (int i = 0; i < rows; i++)
       {
-         int grayscaleValue = image[i][j]; 
-         float percent = (float)grayscaleValue/255; 
-         color current = lerpColor(from, to, percent); 
-         stroke(current);
-         point(i,j);
+        for (int j = 0; j < cols; j++)
+          {
+           int grayscaleValue = image[i][j]; 
+           float percent = (float)grayscaleValue/255; 
+           color current = lerpColor(from, to, percent); 
+           stroke(current);
+           point(i,j);
+          }
       }
   }
+
+  if(!color_do)
+  {
+      for (int i = 0; i < rows; i++)
+      {
+        for (int j = 0; j < cols; j++)
+          {
+           int grayscaleValue = image[i][j]; 
+           stroke(grayscaleValue);
+           point(i,j);
+          }
+      }
+  }
+
   
   if(first)
   {
     first = false;
     save("one.png");
     
-    new ImageResize().doInterpolation(); 
+    new Resize().doInterpolation(); 
     
   }
   
@@ -298,7 +315,7 @@ class Cell {
 
 // Interpolation
 
-public class ImageResize {
+public class Resize {
  
   private static final int IMG_WIDTH = 800;
   private static final int IMG_HEIGHT = 583;
@@ -351,4 +368,21 @@ public class ImageResize {
     
     
     
+}
+
+
+void keyPressed()
+{
+  if(key == 'c')
+  {
+    if(color_do == true)
+    {
+      color_do = false; 
+    }
+    else
+    {
+      color_do = true;
+    }
+    
+  }
 }
