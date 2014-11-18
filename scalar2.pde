@@ -116,7 +116,7 @@ void draw()
   if(first)
   {
     first = false;
-    save("one.png");
+    save("normal_image.png");
     
     new Resize().doInterpolation(); 
     
@@ -324,16 +324,14 @@ public class Resize {
  
   try{
  
-      BufferedImage originalImage = ImageIO.read(new File("one.png"));
+      BufferedImage originalImage = ImageIO.read(new File("normal_image.png"));
       int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
    
       BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
-      ImageIO.write(resizeImageHintPng, "png", new File("4.png")); 
+      ImageIO.write(resizeImageHintPng, "png", new File("interpolated_image.png")); 
  
-   }catch(IOException e){
-      println(e.getMessage());
-  }
+      }catch(IOException e){}
  
     }
  
