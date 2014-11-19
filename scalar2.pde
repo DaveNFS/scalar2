@@ -19,6 +19,9 @@ color from = color(44, 162, 95);
 color to_mt = color(227, 74, 51);
 color from_mt = color(254, 232, 200);
 
+color to_mt2 = color(117, 107, 177); 
+color from_mt2 = color(239, 237, 245); 
+
 
 // may be used later
 color tempColorArr[][]; 
@@ -90,10 +93,28 @@ void setup()
   {
     for (int j = 0; j < cols_mt; j++)
       {
-         int grayscaleValue = image[i][j]; 
+         int grayscaleValue = image_mt[i][j]; 
+//         float percent = (float)grayscaleValue/255; 
+//         color current = lerpColor(from_mt, to_mt, percent); 
+//         mt_color[i][j] = current; 
+
+         
+         
+         if(grayscaleValue<0)
+         {
+         float percent = (float)grayscaleValue/255; 
+         color current = lerpColor(from_mt2, to_mt2, percent); 
+         mt_color[i][j] = current; 
+         }
+         else
+         {
          float percent = (float)grayscaleValue/255; 
          color current = lerpColor(from_mt, to_mt, percent); 
          mt_color[i][j] = current; 
+
+         }
+         
+         
 
       }
   }
@@ -328,9 +349,9 @@ void draw()
       {
         for (int j = 0; j < cols_mt; j++)
           {
-           int grayscaleValue = image_mt[i][j]; 
-           float percent = (float)grayscaleValue/255; 
-           color current = lerpColor(from_mt, to_mt, percent); 
+//           int grayscaleValue = image_mt[i][j]; 
+//           float percent = (float)grayscaleValue/255; 
+           color current = mt_color[i][j];
            stroke(current);
            point(i,j);
           }
