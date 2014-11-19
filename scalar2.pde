@@ -16,6 +16,10 @@ int image[][];
 color to = color( 229, 245, 249); 
 color from = color(44, 162, 95); 
 
+color to_mt = color(227, 74, 51);
+color from_mt = color(254, 232, 200);
+
+
 // may be used later
 color tempColorArr[][]; 
 
@@ -23,6 +27,12 @@ boolean first = true;
 int c_value = 1;  
 
 int isolines[][];
+
+Cell[][] grid;
+int rows_test2, cols_test2; 
+int rows_mt, cols_mt;
+int image_mt[][]; 
+int mt_color[][];
 
 void setup()
 {
@@ -48,6 +58,51 @@ void setup()
         image[i][j] = (int)test.cells[i][j];
       }
   }
+  
+  //-------------------------------
+  // initialize stuff for mtHood
+  ReadFile mt = new ReadFile("mtHood.nrrd");
+  mt.populateMeta();
+  mt.populateValues();
+ // mt.printLines();
+  
+  rows_mt = mt.sizeX; 
+  cols_mt = mt.sizeY; 
+  
+  
+  image_mt = new int[rows][cols]; 
+  
+  // Initialize 2D array values
+  for (int i = 0; i < rows_mt; i++)
+  {
+    for (int j = 0; j < cols_mt; j++)
+      {
+        image_mt[i][j] = (int)mt.cells[i][j];
+      }
+  }
+  
+  
+  // ------------------------------------------
+  // create mt color
+    mt_color = new color[rows_mt][cols_mt]; 
+  
+  for (int i = 0; i < rows_mt; i++)
+  {
+    for (int j = 0; j < cols_mt; j++)
+      {
+         int grayscaleValue = image[i][j]; 
+         float percent = (float)grayscaleValue/255; 
+         color current = lerpColor(from_mt, to_mt, percent); 
+         mt_color[i][j] = current; 
+
+      }
+  }
+  
+  
+  
+  
+  
+  
   
   
   // ---------------------------------------
@@ -104,9 +159,52 @@ void setup()
 
 void draw()
 {
-  // println(mouseX + "  " + mouseY);
+  //  println(mouseX + "  " + mouseY);
   
-  if(c_value == 1)
+  
+   if(c_value == 1)
+{
+
+  int mul = 40;  
+  ReadFile test2 = new ReadFile("test.nrrd");
+  test2.populateMeta();
+  test2.populateValues();
+  // test2.printLines();
+  
+  rows_test2 = test2.sizeX; 
+  cols_test2 = test2.sizeY; 
+  grid = new Cell[cols_test2][rows_test2];
+  for (int i = 0; i < rows_test2; i++) 
+  {
+    for (int j = 0; j < cols_test2; j++)
+    {
+      // Initialize each object
+      float colorValue = test2.cells[i][j];
+      grid[i][j] = new Cell(i*mul,j*mul, mul, mul, colorValue );
+    }
+  }
+
+
+  // draw this stuff
+  for (int i = 0; i < cols_test2; i++)
+  {
+    for (int j = 0; j < rows_test2; j++)
+    {
+      grid[i][j].display();
+    }
+  }
+
+  save("initial.png");
+} 
+
+  
+  
+  
+  
+  
+  
+  
+  if(c_value == 2)
   {
       for (int i = 0; i < rows; i++)
       {
@@ -123,7 +221,7 @@ void draw()
       
   }
 
-  if(c_value == 2)
+  if(c_value == 3)
   {
       for (int i = 0; i < rows; i++)
       {
@@ -142,7 +240,7 @@ void draw()
   // draw isolines: grayscale
   // ----------------
   
-  if(c_value == 3)
+  if(c_value == 4)
   {
     stroke(255, 0, 0);
     noFill();
@@ -166,7 +264,7 @@ void draw()
   // draw isolines: color
   // ----------------
   
-  if(c_value == 4)
+  if(c_value == 5)
   {
     
       for (int i = 0; i < rows; i++)
@@ -198,6 +296,48 @@ void draw()
     
     save("isolines_color.png");
  }
+  
+  if(c_value == 6)
+  {
+    fill(255);
+    rect(0, 0, width, height); 
+
+    
+  }
+
+//-------------------------
+   if(c_value == 7)
+  {
+      for (int i = 0; i < rows_mt; i++)
+      {
+        for (int j = 0; j < cols_mt; j++)
+          {
+           int grayscaleValue = image_mt[i][j]; 
+           stroke(grayscaleValue);
+           point(i,j);
+          }
+      }
+      save("mtHood_gray.png");
+
+  }
+  
+ //------------------------- 
+   if(c_value == 8)
+  {
+      for (int i = 0; i < rows_mt; i++)
+      {
+        for (int j = 0; j < cols_mt; j++)
+          {
+           int grayscaleValue = image_mt[i][j]; 
+           float percent = (float)grayscaleValue/255; 
+           color current = lerpColor(from_mt, to_mt, percent); 
+           stroke(current);
+           point(i,j);
+          }
+      }
+      save("mtHood_color.png");
+      
+  }
   
   
   if(first)
@@ -457,7 +597,7 @@ void keyPressed()
 {
   if(key == 'c')
   {
-    if(c_value == 4)
+    if(c_value == 8)
     {
       c_value = 1; 
     } 
