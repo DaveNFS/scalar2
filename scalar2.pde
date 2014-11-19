@@ -20,7 +20,7 @@ color from = color(44, 162, 95);
 color tempColorArr[][]; 
 
 boolean first = true; 
-boolean color_do = true; 
+int c_value = 1;  
 
 int isolines[][];
 
@@ -106,7 +106,7 @@ void draw()
 {
   // println(mouseX + "  " + mouseY);
   
-  if(color_do)
+  if(c_value == 1)
   {
       for (int i = 0; i < rows; i++)
       {
@@ -119,9 +119,11 @@ void draw()
            point(i,j);
           }
       }
+      save("normal_image.png");
+      
   }
 
-  if(!color_do)
+  if(c_value == 2)
   {
       for (int i = 0; i < rows; i++)
       {
@@ -132,34 +134,76 @@ void draw()
            point(i,j);
           }
       }
+      save("normal_image_gray.png");
+
   }
 
 
-  // draw isolines:
+  // draw isolines: grayscale
   // ----------------
   
-  stroke(255, 0, 0);
-  noFill();
-  beginShape(POINTS);
+  if(c_value == 3)
+  {
+    stroke(255, 0, 0);
+    noFill();
+    beginShape(POINTS);
+        for (int i = 0; i < rows; i++)
+        {
+          for (int j = 0; j < cols; j++)
+            {
+                if(isolines[i][j] == 1)
+                {
+                  vertex(i,j);
+                }
+            }
+        }
+    endShape();
+    
+    save("isolines_gray.png");
+  }
+  
+  
+  // draw isolines: color
+  // ----------------
+  
+  if(c_value == 4)
+  {
+    
       for (int i = 0; i < rows; i++)
       {
         for (int j = 0; j < cols; j++)
           {
-              if(isolines[i][j] == 1)
-              {
-                vertex(i,j);
-              }
+           int grayscaleValue = image[i][j]; 
+           float percent = (float)grayscaleValue/255; 
+           color current = lerpColor(from, to, percent); 
+           stroke(current);
+           point(i,j);
           }
       }
-  endShape();
+    
+    stroke(255, 0, 0);
+    noFill();
+    beginShape(POINTS);
+        for (int i = 0; i < rows; i++)
+        {
+          for (int j = 0; j < cols; j++)
+            {
+                if(isolines[i][j] == 1)
+                {
+                  vertex(i,j);
+                }
+            }
+        }
+    endShape();
+    
+    save("isolines_color.png");
+ }
+  
   
   if(first)
   {
     first = false;
-    save("normal_image.png");
-    
-    new Resize().doInterpolation(); 
-    
+    new Resize().doInterpolation();    
   }
   
 }
@@ -413,14 +457,13 @@ void keyPressed()
 {
   if(key == 'c')
   {
-    if(color_do == true)
+    if(c_value == 4)
     {
-      color_do = false; 
-    }
+      c_value = 1; 
+    } 
     else
     {
-      color_do = true;
+      c_value++;
     }
-    
   }
 }
