@@ -10,6 +10,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
  
  
+ 
+// for marching squares  
+int NORTH = -1; 
+int SOUTH = 1; 
+int EAST = -1; 
+int WEST = 1;
+ 
+ 
 int rows, cols; 
 int image[][];
 
@@ -36,6 +44,8 @@ int rows_test2, cols_test2;
 int rows_mt, cols_mt;
 int image_mt[][]; 
 int mt_color[][];
+int mt_color2[][];
+
 
 void setup()
 {
@@ -103,8 +113,10 @@ void setup()
          if(grayscaleValue<0)
          {
          float percent = (float)grayscaleValue/255; 
+         if(percent < 0) percent = (-1) * percent; 
          color current = lerpColor(from_mt2, to_mt2, percent); 
          mt_color[i][j] = current; 
+      
          }
          else
          {
@@ -215,7 +227,7 @@ void draw()
     }
   }
 
-  save("initial.png");
+  save("data/initial.png");
 } 
 
   
@@ -238,7 +250,7 @@ void draw()
            point(i,j);
           }
       }
-      save("normal_image.png");
+      save("data/normal_image.png");
       
   }
 
@@ -253,16 +265,40 @@ void draw()
            point(i,j);
           }
       }
-      save("normal_image_gray.png");
+      save("data/normal_image_gray.png");
 
   }
+
+
+ // ------------------
+ // show interpolated image
+  if(c_value == 4)
+  {
+     PImage img = loadImage("interpolated_image.png");
+     image(img, 0, 0);
+     
+  }
+
 
 
   // draw isolines: grayscale
   // ----------------
   
-  if(c_value == 4)
+  if(c_value == 5)
   {
+    
+      for (int i = 0; i < rows; i++)
+      {
+        for (int j = 0; j < cols; j++)
+          {
+           int grayscaleValue = image[i][j]; 
+           stroke(grayscaleValue);
+           point(i,j);
+          }
+      }
+
+    
+       
     stroke(255, 0, 0);
     noFill();
     beginShape(POINTS);
@@ -278,14 +314,14 @@ void draw()
         }
     endShape();
     
-    save("isolines_gray.png");
+    save("data/isolines_gray.png");
   }
   
   
   // draw isolines: color
   // ----------------
   
-  if(c_value == 5)
+  if(c_value == 6)
   {
     
       for (int i = 0; i < rows; i++)
@@ -315,10 +351,10 @@ void draw()
         }
     endShape();
     
-    save("isolines_color.png");
+    save("data/isolines_color.png");
  }
   
-  if(c_value == 6)
+  if(c_value == 7)
   {
     fill(255);
     rect(0, 0, width, height); 
@@ -327,7 +363,7 @@ void draw()
   }
 
 //-------------------------
-   if(c_value == 7)
+   if(c_value == 8)
   {
       for (int i = 0; i < rows_mt; i++)
       {
@@ -338,12 +374,12 @@ void draw()
            point(i,j);
           }
       }
-      save("mtHood_gray.png");
+      save("data/mtHood_gray.png");
 
   }
   
  //------------------------- 
-   if(c_value == 8)
+   if(c_value == 9)
   {
       for (int i = 0; i < rows_mt; i++)
       {
@@ -356,9 +392,64 @@ void draw()
            point(i,j);
           }
       }
-      save("mtHood_color.png");
+      save("data/mtHood_color.png");
       
   }
+  
+  //------------------------------
+  if(c_value == 10)
+  {
+        mt_color2 = new color[rows_mt][cols_mt]; 
+    
+      for (int i = 0; i < rows_mt; i++)
+      {
+        for (int j = 0; j < cols_mt; j++)
+          {
+             int grayscaleValue = image_mt[i][j]; 
+    //         float percent = (float)grayscaleValue/255; 
+    //         color current = lerpColor(from_mt, to_mt, percent); 
+    //         mt_color[i][j] = current; 
+    
+             
+             
+             if(grayscaleValue<0)
+             {
+             float percent = (float)grayscaleValue/255; 
+             if(percent < 0) percent = (-1) * percent; 
+             color current = lerpColor(from_mt2, to_mt2, percent); 
+             mt_color2[i][j] = current; 
+          
+             }
+             else
+             {
+             float percent = (float)grayscaleValue/255; 
+             color current = lerpColor(from_mt2, to_mt2, percent); 
+             mt_color2[i][j] = current; 
+    
+             }
+             
+             
+    
+          }
+      }
+    
+     for (int i = 0; i < rows_mt; i++)
+      {
+        for (int j = 0; j < cols_mt; j++)
+          {
+//           int grayscaleValue = image_mt[i][j]; 
+//           float percent = (float)grayscaleValue/255; 
+           color current = mt_color2[i][j];
+           stroke(current);
+           point(i,j);
+          }
+      }
+      save("data/mtHood_color2.png");
+    
+    
+    
+  }
+  
   
   
   if(first)
@@ -618,7 +709,7 @@ void keyPressed()
 {
   if(key == 'c')
   {
-    if(c_value == 8)
+    if(c_value == 10)
     {
       c_value = 1; 
     } 
